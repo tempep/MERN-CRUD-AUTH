@@ -1,25 +1,22 @@
 import { useEffect } from "react";
 import { useTasks } from "../context/TasksContext";
-import { useAuth } from "../context/AuthContext";
+import TaskCard from "../components/TaskCard";
 
 function TasksPage() {
-  const { loadTasks, tasks } = useTasks();
+  const { loadTasks, tasks, } = useTasks();
 
   useEffect(() => {
     loadTasks();
-  }, []);
+  }, [tasks]);
 
   console.log(tasks);
 
   return (
-    <div className="flex justify-center gap-3 m-3">
-      {tasks.map(task => (
-        <div className="bg-zinc-800 p-10 rounded-md border border-white transition ease-in-out delay-150 hover:scale-110" key={task._id}>
-          <p className="text-2xl">{task.title}</p>
-          <p className="text-center">{task.description}</p>
-        </div>
-      ))}
-    </div>
+    <main className="bg-zinc-700 p-2 rounded-sm grid grid-rows-2 grid-cols-3 gap-2 m-5">
+        {tasks.length > 0 ? (tasks.map((task) => (
+          <TaskCard task={task} />))) : (<p className="text-center col-span-3 row-span-3 text-xl">No task to show</p>)
+        }
+    </main>
   );
 }
 

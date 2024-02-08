@@ -18,29 +18,42 @@ export const AuthProvider = ({ children }) => {
   const [errors, setErrors] = useState([]);
   const [loading, setLoading] = useState(true);
 
+  // function for signup
   const signup = async (user) => {
     try {
       const res = await registerRequest(user);
       console.log(res.data);
       setUser(res.data);
       setIsAuthenticated(true);
+      return true;
     } catch (error) {
       console.log(error.response);
       setErrors(error.response.data);
+      return false;
     }
   };
 
+  //function for login
   const signin = async (user) => {
     try {
       const res = await loginRequest(user);
       console.log(res);
       setIsAuthenticated(true);
       setUser(res.data);
+      return true;
     } catch (error) {
       console.log(error);
       setErrors(error.response.data);
+      return false;
     }
   };
+
+  //function for logout
+  const logout = () => {
+    Cookies.remove("token");
+    setIsAuthenticated(false);
+    setUser(null);
+  }
 
   useEffect(() => {
     if (errors.length > 0) {
@@ -68,7 +81,6 @@ export const AuthProvider = ({ children }) => {
           setLoading(false);
           return;
         }
-        console.log(isAuthenticated);
         setIsAuthenticated(true);
         setUser(res.data);
         setLoading(false);
@@ -87,6 +99,7 @@ export const AuthProvider = ({ children }) => {
       value={{
         signup,
         signin,
+        logout,
         loading,
         user,
         isAuthenticated,
